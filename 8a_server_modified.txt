@@ -1,0 +1,25 @@
+# import libraries
+from flask import Flask, render_template, request
+from EmotionDetection.emotion_detection import emotion_detector  # Import function from package
+
+# Initialize Flask app
+app = Flask(__name__)
+
+@app.route('/emotionDetector', methods=['GET', 'POST'])
+def emotionDetector():
+    if request.method == 'POST':
+        user_text = request.form.get('text', '').strip()  # Remove leading/trailing spaces
+
+        result = emotion_detector(user_text)
+
+        if result['dominant_emotion'] is None:
+            # If input is blank, display user-friendly error
+            message = "Invalid text! Please try again!"
+            return render_template('index.html', message=message, result=None)
+
+        return render_template('index.html', message=None, result=result)
+    return render_template('index.html', message=None, result=None)
+
+# run app
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

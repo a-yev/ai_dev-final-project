@@ -1,0 +1,8 @@
+pylint server.py
+************* Module server
+server.py:39:0: C0304: Final newline missing (missing-final-newline)
+server.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+server.py:9:0: C0103: Function name "emotionDetector" doesn't conform to snake_case naming style (invalid-name)
+
+-----------------------------------
+Your code has been rated at 7.86/10

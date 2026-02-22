@@ -1,0 +1,3 @@
+>>> emotion_detector("I don't like working at night hours.")
+{'anger': 0.09233388, 'disgust': 0.020305602, 'fear': 0.31724524, 'joy': 0.01755455, 'sadness': 0.4937429, 'dominant_emotion': 'sadness'}
+>>> 

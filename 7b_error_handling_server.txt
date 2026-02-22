@@ -1,0 +1,39 @@
+# import libraries
+from flask import Flask, render_template, request
+from EmotionDetection.emotion_detection import emotion_detector  # Import function from package
+
+# Initialize Flask app
+app = Flask(__name__)
+
+@app.route('/emotionDetector', methods=['GET', 'POST'])
+def emotionDetector():
+    """
+    Main endpoint for emotion detection.
+    Handles form input from index.html and returns results or error message.
+    """
+
+    if request.method == 'POST':
+        # --------- Get text input from user form ---------
+        user_text = request.form.get('text', '').strip()  # Remove leading/trailing spaces
+
+        # --------- Call emotion_detector function ---------
+        result = emotion_detector(user_text)
+
+        # --------- Handle blank input or errors ---------
+        if result['dominant_emotion'] is None:
+            # If input is blank, display user-friendly error
+            message = "Invalid text! Please try again!"
+            return render_template('index.html', message=message, result=None)
+
+        # --------- Normal case: display emotions ---------
+        return render_template('index.html', message=None, result=result)
+
+    # --------- GET request: render empty form ---------
+    return render_template('index.html', message=None, result=None)
+
+
+# --------- Run the Flask app ---------
+if __name__ == '__main__':
+    # host='0.0.0.0' allows access from outside the container
+    # debug=True enables hot reload and detailed error messages
+    app.run(host='0.0.0.0', port=5000, debug=True)

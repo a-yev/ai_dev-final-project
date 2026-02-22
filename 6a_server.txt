@@ -1,0 +1,59 @@
+# Import necessary libraries
+from flask import Flask, request, render_template, jsonify
+from EmotionDetection import emotion_detector  # import your function from the package
+
+# Initialize Flask app
+app = Flask(__name__)
+
+# -------------------------------
+# Route for the home page
+# -------------------------------
+@app.route('/')
+def home():
+    """
+    Loads the index.html page when visiting the root URL.
+    index.html is already provided in the templates folder.
+    """
+    return render_template('index.html')
+
+
+# -------------------------------
+# Route for emotion detection
+# -------------------------------
+@app.route('/emotionDetector', methods=['POST'])
+def detect_emotion():
+    """
+    Receives a POST request containing text to analyze.
+    Calls the emotion_detector function from the package.
+    Returns both JSON result and a user-friendly message.
+    """
+    # Get the JSON data sent from frontend
+    data = request.get_json()
+
+    # Extract the text to analyze, default to empty string
+    text_to_analyze = data.get("text", "")
+
+    # Call your emotion detection function
+    result = emotion_detector(text_to_analyze)
+
+    # Prepare a readable message for the user
+    message = (
+        f"For the given statement, the system response is "
+        f"'anger': {result['anger']}, 'disgust': {result['disgust']}, "
+        f"'fear': {result['fear']}, 'joy': {result['joy']}, "
+        f"'sadness': {result['sadness']}. "
+        f"The dominant emotion is {result['dominant_emotion']}."
+    )
+
+    # Return both JSON and the readable message
+    return jsonify(result=result, message=message)
+
+
+# -------------------------------
+# Run the Flask server
+# -------------------------------
+if __name__ == "__main__":
+    # host='0.0.0.0' makes it accessible on localhost
+    # port=5000 is default for Flask
+    # debug=True allows automatic reload when code changes
+    app.run(host='0.0.0.0', port=5000, debug=True)
