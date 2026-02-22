@@ -1,2 +1,2 @@
-Final project "Emotion Detector".
+Final Project.
 Web application integrated with Embeddable Watson AI libraries.
